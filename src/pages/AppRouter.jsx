@@ -14,6 +14,7 @@ function AppRouter() {
             element={React.createElement(route.component)}
             path={route.path}
             exact={route.exact}
+            key={route.key}
           />
         );
       })}

@@ -8,7 +8,7 @@ const Main = () => {
     const fetchData = async () => {
       const idsResponse = await getIds({ offset: 0, limit: 10 });
       if (idsResponse && idsResponse.result) {
-        const itemsResponse = await getItems(idsResponse.result);
+        const itemsResponse = await getItems({ ids: idsResponse.result });
         if (itemsResponse && itemsResponse.result) {
           setItems(itemsResponse.result);
         }
@@ -21,8 +21,8 @@ const Main = () => {
     <div>
       {items.map(item => (
         <div key={item.id}>
-          <h2>{item.property1}</h2>
-          <p>{item.property2}</p>
+          <h2>{item.product}</h2>
+          <p>{item.price}</p>
         </div>
       ))}
     </div>

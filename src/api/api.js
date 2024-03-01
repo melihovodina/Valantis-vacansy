@@ -5,21 +5,22 @@ const password = 'Valantis';
 const timestamp = new Date().toISOString().slice(0,10).replace(/-/g,"");
 const XAuth = md5(`${password}_${timestamp}`);
 
-export async function getIds(offset, limit) {
-    const result = await axios({
-        method: 'post',
-        url:'http://api.valantis.store:40000/',
-        headers: { 'X-Auth': XAuth },
-        data: {
-            action: 'get_ids',
-            params: {offset, limit}
-        }
-    })
-    console.log('Ids:', result.data)
-    return result.data;
+export async function getIds({ offset, limit }) {
+  const result = await axios({
+      method: 'post',
+      url:'http://api.valantis.store:40000/',
+      headers: { 'X-Auth': XAuth },
+      data: {
+          action: 'get_ids',
+          params: { offset, limit }
+      }
+  })
+  console.log('Ids:', result.data)
+  return result.data;
 }
 
-export async function getItems(ids) {
+
+export async function getItems({ ids }) {
     const result = await axios({
       method: 'post',
       url: 'http://api.valantis.store:40000/',
@@ -33,7 +34,7 @@ export async function getItems(ids) {
     return result.data;
 }
   
-export async function getFields(field, offset, limit) {
+export async function getFields({field, offset, limit}) {
     const result = await axios({
       method: 'post',
       url: 'http://api.valantis.store:40000/',
@@ -47,7 +48,7 @@ export async function getFields(field, offset, limit) {
     return result.data;
 }
   
-export async function filter(price) {
+export async function filter({price}) {
     const result = await axios({
       method: 'post',
       url: 'http://api.valantis.store:40000/',
