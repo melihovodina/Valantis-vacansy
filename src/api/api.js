@@ -19,7 +19,6 @@ export async function getIds({ offset, limit }) {
   return result.data;
 }
 
-
 export async function getItems({ ids }) {
     const result = await axios({
       method: 'post',
@@ -48,16 +47,16 @@ export async function getFields({field, offset, limit}) {
     return result.data;
 }
   
-export async function filter({price}) {
-    const result = await axios({
-      method: 'post',
-      url: 'http://api.valantis.store:40000/',
-      headers: { 'X-Auth': XAuth },
-      data: {
-        action: 'filter',
-        params: { price }
-      }
-    });
-    console.log('Filtered items: ', result.data);
-    return result.data;
+export async function filter(params) {
+  const result = await axios({
+    method: 'post',
+    url: 'http://api.valantis.store:40000/',
+    headers: { 'X-Auth': XAuth },
+    data: {
+      action: 'filter',
+      params: params
+    }
+  });
+  console.log('Filtered items: ', result.data);
+  return result.data;
 }

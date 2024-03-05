@@ -1,0 +1,55 @@
+.filter-main {
+    width: 250px;
+    height: 100%;
+    margin: 0px 0px 0px 20px;
+    position: sticky;
+    top:0;
+}
+
+.filter-box {
+    width: 250px;
+    height: 370px;
+    border: 1px solid rgb(198, 198, 198);
+    border-radius: 10px;
+}
+
+.filter-header {
+    margin: 0px 0px 5px 5px;
+    font-weight: 500;
+}
+
+.filter-text {
+    margin: 10px 0px 0px 8px;
+}
+
+.filter-input {
+    border: 1px solid rgb(198, 198, 198);
+    border-radius: 5px;
+    height: 30px;
+    margin: 5px 0px 5px 5px;
+    font-size: small;
+}
+
+.filter-button-box {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.filter-button {
+    width: 90%;
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    background-color: #A52838;
+    color: white;
+    cursor: pointer;
+}
+
+.filter-button:hover {
+    background-color: #d4374c;
+}
+
+.filter-input:focus {
+    outline: none;
+}
