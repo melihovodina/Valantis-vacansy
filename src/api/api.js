@@ -8,7 +8,7 @@ const XAuth = md5(`${password}_${timestamp}`);
 export async function getIds({ offset, limit }) {
   const result = await axios({
       method: 'post',
-      url:'http://api.valantis.store:40000/',
+      url:'https://api.valantis.store:41000/',
       headers: { 'X-Auth': XAuth },
       data: {
           action: 'get_ids',
@@ -22,7 +22,7 @@ export async function getIds({ offset, limit }) {
 export async function getItems({ ids }) {
     const result = await axios({
       method: 'post',
-      url: 'http://api.valantis.store:40000/',
+      url: 'https://api.valantis.store:41000/',
       headers: { 'X-Auth': XAuth },
       data: {
         action: 'get_items',
@@ -36,7 +36,7 @@ export async function getItems({ ids }) {
 export async function getFields({field, offset, limit}) {
     const result = await axios({
       method: 'post',
-      url: 'http://api.valantis.store:40000/',
+      url: 'https://api.valantis.store:41000/',
       headers: { 'X-Auth': XAuth },
       data: {
         action: 'get_fields',
@@ -50,7 +50,7 @@ export async function getFields({field, offset, limit}) {
 export async function filter(params) {
   const result = await axios({
     method: 'post',
-    url: 'http://api.valantis.store:40000/',
+    url: 'https://api.valantis.store:41000/',
     headers: { 'X-Auth': XAuth },
     data: {
       action: 'filter',
