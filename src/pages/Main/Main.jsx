@@ -42,7 +42,7 @@ const Main = () => {
         <Filter setItems={setItems} setLoading={setLoading}/>
         </div>
           {loading ? (
-            <CgSpinner className="spinner" size={45}/>
+              <CgSpinner className="spinner" size={45}/>
           ) : (
             <Content items={items} setItems={setItems}/>
           )}

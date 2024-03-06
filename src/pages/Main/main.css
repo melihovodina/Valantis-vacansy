@@ -19,7 +19,9 @@
     color: #A52838;
     margin-top: 0.125rem;
     animation: spin 1s linear infinite;
-    margin: 50px 0px 0px 480px;
+    position: absolute;
+    left: 49%;
+    top: 25%;
 }
 
 @keyframes spin {
