@@ -1,32 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { getIds, getItems } from '../../api/api'
+import React from 'react'
 import './content.css'
 
-const Content = () => {
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const idsResponse = await getIds({ offset: 0, limit: 10 });
-      if (idsResponse && idsResponse.result) {
-        const itemsResponse = await getItems({ ids: idsResponse.result });
-        if (itemsResponse && itemsResponse.result) {
-          // Создаем Set для хранения уникальных идентификаторов
-          const uniqueIds = new Set();
-          const uniqueItems = itemsResponse.result.filter(item => {
-            if (!uniqueIds.has(item.id)) {
-              uniqueIds.add(item.id);
-              return true;
-            }
-            return false;
-          });
-          setItems(uniqueItems);
-        }
-      }
-    };
-    fetchData();
-  }, []);
-
+const Content = ({ items }) => {
+  console.log('Items prop in Content:', items);
   return (
     <div className='content-main'>
       {items.map(item => (
