@@ -15,3 +15,15 @@
     top: 0;
 }
 
+.spinner {
+    color: #A52838;
+    margin-top: 0.125rem;
+    animation: spin 1s linear infinite;
+    margin: 50px 0px 0px 480px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+

@@ -30,6 +30,10 @@
     font-size: small;
 }
 
+.filter-input:focus {
+    outline: none;
+}
+
 .filter-button-box {
     width: 100%;
     text-align: center;
@@ -50,6 +54,16 @@
     background-color: #d4374c;
 }
 
-.filter-input:focus {
-    outline: none;
+.filter-back-button {
+    width: 90%;
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    background-color: rgb(159, 159, 159);
+    color: white;
+    cursor: pointer;
+}
+
+.filter-back-button:hover {
+    background-color: rgb(211, 211, 211);
 }

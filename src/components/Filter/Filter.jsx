@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { filter, getItems } from '../../api/api';
+import { filter, getItems, getIds } from '../../api/api';
 import './filter.css'
 
-const Filter = ({ setItems }) => {
+const Filter = ({ setItems, setLoading }) => {
   const [brand, setBrand] = useState('');
   const [product, setProduct] = useState('');
   const [price, setPrice] = useState('');
   const [id, setId] = useState('');
+  const [filtered, setFiltered] = useState(false);
 
   const handleSearch = async () => {
+    setLoading(true);
     const filters = {
       brand,
       product,
@@ -16,7 +18,7 @@ const Filter = ({ setItems }) => {
       id
     };
 
-    let ids = [];
+    let idsArrays = [];
     for (const [key, value] of Object.entries(filters)) {
       if (value) {
         if (key === 'id') {
@@ -27,26 +29,41 @@ const Filter = ({ setItems }) => {
           }
         } else {
           const filterIds = (await filter({ [key]: value })).result;
-          ids = ids.concat(filterIds);
+          idsArrays.push(filterIds);
         }
       }
     }
-    ids = [...new Set(ids)];
+    const ids = idsArrays.reduce((a, b) => a.filter(c => b.includes(c)));
 
     if (ids.length > 0) {
       const itemsResponse = await getItems({ ids });
       setItems(itemsResponse.result);
     }
-  };  
+    setLoading(false);
+    setFiltered(true);
+  };    
+
+  const resetItems = async () => {
+    setLoading(true);
+    const idsResponse = await getIds({ offset: 0, limit: 10 });
+    const itemsResponse = await getItems({ ids: idsResponse.result });
+    setItems(itemsResponse.result);
+    setLoading(false);
+    setFiltered(false);
+    setBrand('');
+    setProduct('');
+    setPrice('');
+    setId('');
+  };
 
   return (
     <div className="filter-main">
       <h3 className='filter-header'>Поиск</h3>
       <div className='filter-box'>
-        <p className='filter-text'>Бренд</p>
-        <input className='filter-input' placeholder='Найти по бренду' value={brand} onChange={e => setBrand(e.target.value)} />
         <p className='filter-text'>Название</p>
         <input className='filter-input' placeholder='Найти по названию' value={product} onChange={e => setProduct(e.target.value)} />
+        <p className='filter-text'>Бренд</p>
+        <input className='filter-input' placeholder='Найти по бренду' value={brand} onChange={e => setBrand(e.target.value)} />
         <p className='filter-text'>Цена</p>
         <input className='filter-input' type='number' style={{appearance: 'textfield'}} 
         placeholder='Найти по цене' value={price} onChange={e => setPrice(e.target.value)}/>
@@ -56,6 +73,11 @@ const Filter = ({ setItems }) => {
           <button className='filter-button' onClick={handleSearch}>Найти</button>
         </div>
       </div>
+      {filtered && (
+        <div className='filter-button-box'>
+        <button className='filter-back-button'onClick={resetItems}>Вернуться к основным товарам</button>
+        </div>
+      )}
     </div>
   );
 }

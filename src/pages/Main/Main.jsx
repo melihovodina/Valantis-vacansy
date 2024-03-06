@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react'
+import { getIds, getItems } from '../../api/api'
 import Filter from '../../components/Filter/Filter';
 import Header from '../../components/Header/Header';
 import Content from '../../components/Content/Content';
+import { CgSpinner } from 'react-icons/cg';
 import './main.css'
-import { getIds, getItems } from '../../api/api'
 
 const Main = () => {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const idsResponse = await getIds({ offset: 0, limit: 10 });
       if (idsResponse && idsResponse.result) {
         const itemsResponse = await getItems({ ids: idsResponse.result });
         if (itemsResponse && itemsResponse.result) {
-          // Создаем Set для хранения уникальных идентификаторов
           const uniqueIds = new Set();
           const uniqueItems = itemsResponse.result.filter(item => {
             if (!uniqueIds.has(item.id)) {
@@ -27,6 +29,7 @@ const Main = () => {
           console.log('Items state in Main after setItems:', items);
         }
       }
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -36,9 +39,13 @@ const Main = () => {
       <Header/>
       <div className='content'>
         <div className='filter'>
-          <Filter setItems={setItems}/>
+        <Filter setItems={setItems} setLoading={setLoading}/>
         </div>
-        <Content items={items} setItems={setItems}/>
+          {loading ? (
+            <CgSpinner className="spinner" size={45}/>
+          ) : (
+            <Content items={items} setItems={setItems}/>
+          )}
       </div>
     </div>
   );
