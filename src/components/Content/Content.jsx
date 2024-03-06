@@ -23,9 +23,6 @@ const Content = ({ items }) => {
           </div>
         </div>
       ))}
-      <div className='content-pages'>
-        
-      </div>
     </div>
   );
 }

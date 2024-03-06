@@ -8,7 +8,8 @@ import './main.css'
 
 const Main = () => {
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+  const [notFounded, setNotFounded] = useState('')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,15 +38,22 @@ const Main = () => {
   return (
     <div className='main'>
       <Header/>
+      <div className='notFounded-box'>
+        <div className='notFounded'>
+          {notFounded}
+        </div>
+      </div>
       <div className='content'>
         <div className='filter'>
-        <Filter setItems={setItems} setLoading={setLoading}/>
+        <Filter setItems={setItems} setLoading={setLoading} setNotFounded={setNotFounded}/>
         </div>
-          {loading ? (
-              <CgSpinner className="spinner" size={45}/>
-          ) : (
-            <Content items={items} setItems={setItems}/>
-          )}
+        {loading ? (
+          <CgSpinner className="spinner" size={45}/>
+        ) : notFounded ? (
+          ''
+        ) : (
+           <Content items={items} setItems={setItems}/>
+        )}
       </div>
     </div>
   );

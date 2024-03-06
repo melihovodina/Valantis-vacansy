@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { filter, getItems, getIds } from '../../api/api';
 import './filter.css'
 
-const Filter = ({ setItems, setLoading }) => {
+const Filter = ({ setItems, setLoading, setNotFounded }) => {
   const [brand, setBrand] = useState('');
   const [product, setProduct] = useState('');
   const [price, setPrice] = useState('');
@@ -37,13 +37,22 @@ const Filter = ({ setItems, setLoading }) => {
 
     if (ids.length > 0) {
       const itemsResponse = await getItems({ ids });
-      setItems(itemsResponse.result);
+      if(itemsResponse.result.length > 0) {
+        setItems(itemsResponse.result);
+      }
+      else {
+        setNotFounded('Товар не найден')
+      }
+    }
+    else {
+      setNotFounded('Товар не найден')
     }
     setLoading(false);
     setFiltered(true);
   };    
 
   const resetItems = async () => {
+    setNotFounded('')
     setLoading(true);
     const idsResponse = await getIds({ offset: 0, limit: 10 });
     const itemsResponse = await getItems({ ids: idsResponse.result });
