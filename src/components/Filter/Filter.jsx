@@ -12,8 +12,8 @@ const Filter = ({ setItems, setLoading, setNotFounded }) => {
   const handleSearch = async () => {
     setLoading(true);
     const filters = {
-      brand,
-      product,
+      brand: brand.charAt(0).toUpperCase() + brand.slice(1),
+      product: product.charAt(0).toUpperCase() + product.slice(1),
       price: price ? Number(price) : null,
       id
     };

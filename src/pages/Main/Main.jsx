@@ -27,7 +27,6 @@ const Main = () => {
             return false;
           });
           setItems(uniqueItems);
-          console.log('Items state in Main after setItems:', items);
         }
       }
       setLoading(false);

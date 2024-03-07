@@ -1,5 +1,6 @@
 .main {
     width: 100%;
+    min-height: 101vh;
 }
 
 .content {
@@ -21,7 +22,7 @@
     animation: spin 1s linear infinite;
     position: absolute;
     left: 49.5%;
-    top: 25%;
+    top: 300px;
 }
 
 @keyframes spin {

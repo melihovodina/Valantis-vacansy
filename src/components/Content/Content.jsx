@@ -2,7 +2,6 @@ import React from 'react'
 import './content.css'
 
 const Content = ({ items }) => {
-  console.log('Items prop in Content:', items);
   return (
     <div className='content-main'>
       {items.map(item => (
