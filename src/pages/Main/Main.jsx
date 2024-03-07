@@ -10,29 +10,45 @@ const Main = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notFounded, setNotFounded] = useState('')
+  const [page, setPage] = useState(1);
+  const [filteredIds, setFilteredIds] = useState([]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    const offset = (page - 1) * 50;
+    let ids = [];
+    if (filteredIds.length > 0) {
+      ids = filteredIds.slice(offset, offset + 50);
+    } else {
+      let dubOffset = offset;
+      let dubLimit = 0;
+      let idsResponse = await getIds({ offset: offset, limit: 50 });
+      let newIds = Array.from(new Set(idsResponse.result));
+      ids = [...new Set([...ids, ...newIds])];
+      while (ids.length < 50) {
+        dubOffset += ids.length + 1 + dubLimit;
+        dubLimit = 50 - ids.length
+        idsResponse = await getIds({ offset: dubOffset, limit: dubLimit });
+        newIds = Array.from(new Set(idsResponse.result));
+        ids = [...new Set([...ids, ...newIds])];
+      }
+    }
+    const itemsResponse = await getItems({ ids });
+    const itemsMap = new Map();
+    itemsResponse.result.forEach(item => {
+    if (!itemsMap.has(item.id)) {
+      itemsMap.set(item.id, item);
+    }
+  });
+  const uniqueItems = Array.from(itemsMap.values());
+  setItems(uniqueItems);
+  setLoading(false);
+};  
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const idsResponse = await getIds({ offset: 0, limit: 10 });
-      if (idsResponse && idsResponse.result) {
-        const itemsResponse = await getItems({ ids: idsResponse.result });
-        if (itemsResponse && itemsResponse.result) {
-          const uniqueIds = new Set();
-          const uniqueItems = itemsResponse.result.filter(item => {
-            if (!uniqueIds.has(item.id)) {
-              uniqueIds.add(item.id);
-              return true;
-            }
-            return false;
-          });
-          setItems(uniqueItems);
-        }
-      }
-      setLoading(false);
-    };
+    window.scrollTo(0, 0);
     fetchData();
-  }, []);
+  }, [page]);
 
   return (
     <div className='main'>
@@ -44,7 +60,13 @@ const Main = () => {
       </div>
       <div className='content'>
         <div className='filter'>
-        <Filter setItems={setItems} setLoading={setLoading} setNotFounded={setNotFounded}/>
+        <Filter setItems={setItems} 
+        setLoading={setLoading} 
+        setNotFounded={setNotFounded} 
+        setFilteredIds={setFilteredIds} 
+        setPage={setPage}
+        fetchData={fetchData}
+        />
         </div>
         {loading ? (
           <CgSpinner className="spinner" size={45}/>
@@ -54,6 +76,8 @@ const Main = () => {
            <Content items={items} setItems={setItems}/>
         )}
       </div>
+      <button onClick={() => setPage(prevPage => prevPage - 1)}>Предыдущая страница</button>
+      <button onClick={() => setPage(prevPage => prevPage + 1)}>Следующая страница</button>
     </div>
   );
 }

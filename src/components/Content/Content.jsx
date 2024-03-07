@@ -4,10 +4,10 @@ import './content.css'
 const Content = ({ items }) => {
   return (
     <div className='content-main'>
-      {items.map(item => (
+      {items.map((item, index) => (
         <div className='content-item' key={item.id}>
           <div className='content-item-name'>
-            <h2>{item.product}</h2>
+            <h2>{index + 1}. {item.product}</h2>
           </div>
           <div className='content-item-brand'>
             <p>Бренд: {item.brand ? item.brand : 'нет'}</p>

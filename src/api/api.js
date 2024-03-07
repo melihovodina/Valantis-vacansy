@@ -83,7 +83,7 @@ export async function filter(params) {
         url: 'https://api.valantis.store:41000/',
         headers: { 'X-Auth': XAuth},
         data: {
-          action: 'get_items',
+          action: 'filter',
           params: params
         }
       })

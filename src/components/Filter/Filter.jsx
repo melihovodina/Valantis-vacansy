@@ -1,8 +1,9 @@
+// Filter.js
 import React, { useState } from 'react';
 import { filter, getItems, getIds } from '../../api/api';
 import './filter.css'
 
-const Filter = ({ setItems, setLoading, setNotFounded }) => {
+const Filter = ({ setItems, setLoading, setNotFounded, setFilteredIds, setPage, fetchData }) => {
   const [brand, setBrand] = useState('');
   const [product, setProduct] = useState('');
   const [price, setPrice] = useState('');
@@ -17,7 +18,7 @@ const Filter = ({ setItems, setLoading, setNotFounded }) => {
       price: price ? Number(price) : null,
       id
     };
-
+  
     let idsArrays = [];
     for (const [key, value] of Object.entries(filters)) {
       if (value) {
@@ -34,36 +35,32 @@ const Filter = ({ setItems, setLoading, setNotFounded }) => {
       }
     }
     const ids = idsArrays.reduce((a, b) => a.filter(c => b.includes(c)));
-
+  
     if (ids.length > 0) {
-      const itemsResponse = await getItems({ ids });
-      if(itemsResponse.result.length > 0) {
-        setItems(itemsResponse.result);
-      }
-      else {
-        setNotFounded('Товар не найден')
-      }
-    }
-    else {
-      setNotFounded('Товар не найден')
+      setFilteredIds(ids);
+      setPage(1);
+      fetchData()
+    } else {
+      setNotFounded('Товар не найден');
     }
     setLoading(false);
     setFiltered(true);
-  };    
+  }; 
 
   const resetItems = async () => {
-    setNotFounded('')
+    setNotFounded('');
     setLoading(true);
-    const idsResponse = await getIds({ offset: 0, limit: 10 });
-    const itemsResponse = await getItems({ ids: idsResponse.result });
-    setItems(itemsResponse.result);
+    setPage(1);
+    fetchData();
     setLoading(false);
     setFiltered(false);
     setBrand('');
     setProduct('');
     setPrice('');
     setId('');
+    setFilteredIds([]);
   };
+  
 
   return (
     <div className="filter-main">
