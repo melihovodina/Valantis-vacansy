@@ -12,10 +12,14 @@ const Main = () => {
   const [notFounded, setNotFounded] = useState('')
   const [page, setPage] = useState(1);
   const [filteredIds, setFilteredIds] = useState([]);
+  const [duplicates, setDuplicates] = useState([0]);
+  console.log("create array: ", duplicates)
 
   const fetchData = async () => {
     setLoading(true);
-    const offset = (page - 1) * 50;
+    const offset = (page - 1) * 50 + duplicates.slice(0, page).reduce((a, b) => a + b, 0);;
+    console.log("array + to offset: ", duplicates)
+    console.log("create offset: ", offset)
     let ids = [];
     if (filteredIds.length > 0) {
       ids = filteredIds.slice(offset, offset + 50);
@@ -32,23 +36,36 @@ const Main = () => {
         newIds = Array.from(new Set(idsResponse.result));
         ids = [...new Set([...ids, ...newIds])];
       }
+      setDuplicates(prevDuplicates => {
+        let newDuplicates = [...prevDuplicates];
+        newDuplicates[page] = dubLimit;
+        return newDuplicates;
+      });
     }
     const itemsResponse = await getItems({ ids });
     const itemsMap = new Map();
     itemsResponse.result.forEach(item => {
-    if (!itemsMap.has(item.id)) {
-      itemsMap.set(item.id, item);
-    }
-  });
-  const uniqueItems = Array.from(itemsMap.values());
-  setItems(uniqueItems);
-  setLoading(false);
-};  
+      if (!itemsMap.has(item.id)) {
+        itemsMap.set(item.id, item);
+      }
+    });
+    const uniqueItems = Array.from(itemsMap.values());
+    setItems(uniqueItems);
+    setLoading(false);
+  };  
 
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData();
   }, [page]);
+
+  const back = () => {
+    setPage(prevPage => prevPage - 1)
+  }
+
+  const forward = () => {
+    setPage(prevPage => prevPage + 1)
+  }
 
   return (
     <div className='main'>
@@ -76,8 +93,8 @@ const Main = () => {
            <Content items={items} setItems={setItems}/>
         )}
       </div>
-      <button onClick={() => setPage(prevPage => prevPage - 1)}>Предыдущая страница</button>
-      <button onClick={() => setPage(prevPage => prevPage + 1)}>Следующая страница</button>
+      <button onClick={back}>Предыдущая страница</button>
+      <button onClick={forward}>Следующая страница</button>
     </div>
   );
 }
