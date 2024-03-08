@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { filter, getItems, getIds } from '../../api/api';
+import { filter, getItems } from '../../api/api';
 import './filter.css'
 
-const Filter = ({ setItems, setLoading, setNotFounded, setFilteredIds, setPage, fetchData }) => {
+const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDuplicates }) => {
   const [brand, setBrand] = useState('');
   const [product, setProduct] = useState('');
   const [price, setPrice] = useState('');
@@ -11,6 +11,7 @@ const Filter = ({ setItems, setLoading, setNotFounded, setFilteredIds, setPage, 
 
   const handleSearch = async () => {
     setLoading(true);
+    setDuplicates([0])
     const filters = {
       brand: brand.charAt(0).toUpperCase() + brand.slice(1),
       product: product.charAt(0).toUpperCase() + product.slice(1),
@@ -34,13 +35,15 @@ const Filter = ({ setItems, setLoading, setNotFounded, setFilteredIds, setPage, 
       }
     }
     const ids = idsArrays.reduce((a, b) => a.filter(c => b.includes(c)));
-  
+    
     if (ids.length > 0) {
       await fetchData(ids);
       setPage(1);
     } else {
       setNotFounded('Товар не найден');
+      await fetchData(ids);
     }
+    
     setLoading(false);
     setFiltered(true);
   }; 
@@ -48,16 +51,18 @@ const Filter = ({ setItems, setLoading, setNotFounded, setFilteredIds, setPage, 
   const resetItems = async () => {
     setNotFounded('');
     setLoading(true);
+    setDuplicates([0])
     setPage(1);
+    setItems([]);
     await fetchData();
     setFiltered(false);
     setBrand('');
     setProduct('');
     setPrice('');
     setId('');
-    setFilteredIds([]);
     setLoading(false);
   };
+  
   
 
   return (

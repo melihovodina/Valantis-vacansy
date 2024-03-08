@@ -11,35 +11,40 @@ const Main = () => {
   const [loading, setLoading] = useState(true);
   const [notFounded, setNotFounded] = useState('')
   const [page, setPage] = useState(1);
-  const [filteredIds, setFilteredIds] = useState([]);
   const [duplicates, setDuplicates] = useState([0]);
 
-  const fetchData = async (filteredIdsFromSearch) => {
+  const removeDuplicates = async (offset, ids) => {
+    let dubOffset = offset;
+    let dubLimit = 0;
+    while (ids.length < 50) {
+      dubOffset += ids.length + 1 + dubLimit;
+      dubLimit = 50 - ids.length
+      let idsResponse
+      idsResponse = await getIds({ offset: dubOffset, limit: dubLimit });
+      let newIds = Array.from(new Set(idsResponse.result));
+      ids = [...new Set([...ids, ...newIds])];
+    }
+    setDuplicates(prevDuplicates => {
+      let newDuplicates = [...prevDuplicates];
+      newDuplicates[page] = dubLimit;
+      return newDuplicates;
+    });
+    return ids;
+  }
+
+  const fetchData = async (filteredIds) => {
     setLoading(true);
     const offset = (page - 1) * 50 + duplicates.slice(0, page).reduce((a, b) => a + b, 0);
     let ids = [];
-    if (filteredIdsFromSearch) {
-      ids = filteredIdsFromSearch;
-    } else if (filteredIds.length > 0) {
-      ids = filteredIds.slice(offset, offset + 50);
+    let allFilteredIds = filteredIds;
+    if (allFilteredIds && allFilteredIds.length > 0) {
+      let newIds = Array.from(new Set(allFilteredIds.slice(offset, offset + 50)));
+      ids = [...new Set([...ids, ...newIds])];
     } else {
-      let dubOffset = offset;
-      let dubLimit = 0;
       let idsResponse = await getIds({ offset: offset, limit: 50 });
       let newIds = Array.from(new Set(idsResponse.result));
       ids = [...new Set([...ids, ...newIds])];
-      while (ids.length < 50) {
-        dubOffset += ids.length + 1 + dubLimit;
-        dubLimit = 50 - ids.length
-        idsResponse = await getIds({ offset: dubOffset, limit: dubLimit });
-        newIds = Array.from(new Set(idsResponse.result));
-        ids = [...new Set([...ids, ...newIds])];
-      }
-      setDuplicates(prevDuplicates => {
-        let newDuplicates = [...prevDuplicates];
-        newDuplicates[page] = dubLimit;
-        return newDuplicates;
-      });
+      ids = await removeDuplicates(offset, ids);
     }
     const itemsResponse = await getItems({ ids });
     const itemsMap = new Map();
@@ -70,10 +75,10 @@ const Main = () => {
         <div className='filter'>
         <Filter setItems={setItems} 
         setLoading={setLoading} 
-        setNotFounded={setNotFounded} 
-        setFilteredIds={setFilteredIds} 
+        setNotFounded={setNotFounded}  
         setPage={setPage}
         fetchData={fetchData}
+        setDuplicates={setDuplicates}
         />
         </div>
         {loading ? (
