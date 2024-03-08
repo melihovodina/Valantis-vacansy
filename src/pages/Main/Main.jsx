@@ -13,15 +13,14 @@ const Main = () => {
   const [page, setPage] = useState(1);
   const [filteredIds, setFilteredIds] = useState([]);
   const [duplicates, setDuplicates] = useState([0]);
-  console.log("create array: ", duplicates)
 
-  const fetchData = async () => {
+  const fetchData = async (filteredIdsFromSearch) => {
     setLoading(true);
-    const offset = (page - 1) * 50 + duplicates.slice(0, page).reduce((a, b) => a + b, 0);;
-    console.log("array + to offset: ", duplicates)
-    console.log("create offset: ", offset)
+    const offset = (page - 1) * 50 + duplicates.slice(0, page).reduce((a, b) => a + b, 0);
     let ids = [];
-    if (filteredIds.length > 0) {
+    if (filteredIdsFromSearch) {
+      ids = filteredIdsFromSearch;
+    } else if (filteredIds.length > 0) {
       ids = filteredIds.slice(offset, offset + 50);
     } else {
       let dubOffset = offset;
@@ -59,14 +58,6 @@ const Main = () => {
     fetchData();
   }, [page]);
 
-  const back = () => {
-    setPage(prevPage => prevPage - 1)
-  }
-
-  const forward = () => {
-    setPage(prevPage => prevPage + 1)
-  }
-
   return (
     <div className='main'>
       <Header/>
@@ -93,8 +84,10 @@ const Main = () => {
            <Content items={items} setItems={setItems}/>
         )}
       </div>
-      <button onClick={back}>Предыдущая страница</button>
-      <button onClick={forward}>Следующая страница</button>
+      <div className='page-buttons-box'>
+        <button className='page-buttons' onClick={() => setPage(prevPage => prevPage - 1)}>Предыдущая страница</button>
+        <button className='page-buttons' onClick={() => setPage(prevPage => prevPage + 1)}>Следующая страница</button>
+      </div>
     </div>
   );
 }

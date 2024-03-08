@@ -1,4 +1,3 @@
-// Filter.js
 import React, { useState } from 'react';
 import { filter, getItems, getIds } from '../../api/api';
 import './filter.css'
@@ -37,9 +36,8 @@ const Filter = ({ setItems, setLoading, setNotFounded, setFilteredIds, setPage, 
     const ids = idsArrays.reduce((a, b) => a.filter(c => b.includes(c)));
   
     if (ids.length > 0) {
-      setFilteredIds(ids);
+      await fetchData(ids);
       setPage(1);
-      fetchData()
     } else {
       setNotFounded('Товар не найден');
     }
@@ -51,14 +49,14 @@ const Filter = ({ setItems, setLoading, setNotFounded, setFilteredIds, setPage, 
     setNotFounded('');
     setLoading(true);
     setPage(1);
-    fetchData();
-    setLoading(false);
+    await fetchData();
     setFiltered(false);
     setBrand('');
     setProduct('');
     setPrice('');
     setId('');
     setFilteredIds([]);
+    setLoading(false);
   };
   
 
