@@ -10,6 +10,7 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
   const [filtered, setFiltered] = useState(false);
 
   const handleSearch = async () => {
+    setNotFounded('');
     setLoading(true);
     setDuplicates([0])
     const filters = {
@@ -44,7 +45,6 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
       setHasNextPage(hasNextPage);
     } else {
       setNotFounded('Товар не найден');
-      await fetchData(ids);
     }
     window.scrollTo(0, 0);
     setLoading(false);

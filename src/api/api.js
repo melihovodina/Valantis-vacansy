@@ -7,6 +7,7 @@ const XAuth = md5(`${password}_${timestamp}`);
 
 export async function getIds({ offset, limit }) {
   let result;
+  let attempts = 0;
   do {
     try {
       result = await axios ({
@@ -20,8 +21,12 @@ export async function getIds({ offset, limit }) {
       });
     } 
     catch(error) {
-      console.log('Error ', error.response.data.errorId);
-      result = null
+      console.log('Error ', error.response?.data?.errorId || error.message);
+      result = null;
+      attempts++;
+      if (attempts >= 5) {
+        throw new Error("Произошла ошибка, попробуйте позже");
+      }
     }
   }
   while(!result);
@@ -30,6 +35,7 @@ export async function getIds({ offset, limit }) {
 
 export async function getItems({ ids }) {
   let result;
+  let attempts = 0;
   do {
     try {
       result = await axios ({
@@ -43,8 +49,12 @@ export async function getItems({ ids }) {
       })
     }
     catch(error) {
-      console.log('Error ', error.response.data.errorId )
+      console.log('Error ', error.response?.data?.errorId || error.message )
       result = null;
+      attempts++;
+      if (attempts >= 5) {
+        throw new Error("Произошла ошибка, попробуйте позже");
+      }
     }
   }
   while(!result);
@@ -53,6 +63,7 @@ export async function getItems({ ids }) {
   
 export async function getFields({field, offset, limit}) {
   let result;
+  let attempts = 0;
   do {
     try {
       result = await axios ({
@@ -66,8 +77,12 @@ export async function getFields({field, offset, limit}) {
       })
     }
     catch(error) {
-      console.log('Error ', error.response.data.errorId )
+      console.log('Error ', error.response?.data?.errorId || error.message )
       result = null;
+      attempts++;
+      if (attempts >= 5) {
+        throw new Error("Произошла ошибка, попробуйте позже");
+      }
     }
   }
   while(!result);
@@ -76,6 +91,7 @@ export async function getFields({field, offset, limit}) {
   
 export async function filter(params) {
   let result;
+  let attempts = 0;
   do {
     try {
       result = await axios ({
@@ -89,8 +105,12 @@ export async function filter(params) {
       })
     }
     catch(error) {
-      console.log('Error ', error.response.data.errorId )
+      console.log('Error ', error.response?.data?.errorId || error.message )
       result = null;
+      attempts++;
+      if (attempts >= 10) {
+        throw new Error("Произошла ошибка, попробуйте позже");
+      }
     }
   }
   while(!result);
