@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { filter, getItems } from '../../api/api';
 import './filter.css'
 
-const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDuplicates, setHasNextPage }) => {
+const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDuplicates, setHasNextPage, setFilterResults }) => {
   const [brand, setBrand] = useState('');
   const [product, setProduct] = useState('');
   const [price, setPrice] = useState('');
@@ -13,8 +13,8 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
     setLoading(true);
     setDuplicates([0])
     const filters = {
-      brand: brand.charAt(0).toUpperCase() + brand.slice(1),
-      product: product.charAt(0).toUpperCase() + product.slice(1),
+      brand,
+      product,
       price: price ? Number(price) : null,
       id
     };
@@ -37,17 +37,16 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
     const ids = idsArrays.reduce((a, b) => a.filter(c => b.includes(c)));
     
     if (ids.length > 0) {
+      setFilterResults(ids);
       await fetchData(ids);
       setPage(1);
-
-      // Проверьте, есть ли еще страницы с найденными товарами
       const hasNextPage = ids.length > 50;
       setHasNextPage(hasNextPage);
     } else {
       setNotFounded('Товар не найден');
       await fetchData(ids);
     }
-    
+    window.scrollTo(0, 0);
     setLoading(false);
     setFiltered(true);
   }; 
@@ -67,8 +66,6 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
     setLoading(false);
   };
   
-  
-
   return (
     <div className="filter-main">
       <h3 className='filter-header'>Поиск</h3>

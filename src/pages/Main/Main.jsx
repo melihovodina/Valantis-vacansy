@@ -13,6 +13,7 @@ const Main = () => {
   const [page, setPage] = useState(1);
   const [duplicates, setDuplicates] = useState([0]);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [filterResults, setFilterResults] = useState(null);
 
   const removeDuplicates = async (offset, ids) => {
     let dubOffset = offset;
@@ -63,7 +64,7 @@ const Main = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchData();
+    fetchData(filterResults);
   }, [page]);
 
   return (
@@ -83,6 +84,7 @@ const Main = () => {
         fetchData={fetchData}
         setDuplicates={setDuplicates}
         setHasNextPage={setHasNextPage}
+        setFilterResults={setFilterResults}
         />
         </div>
         {loading ? (
