@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { filter, getItems } from '../../api/api';
 import './filter.css'
 
-const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDuplicates }) => {
+const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDuplicates, setHasNextPage }) => {
   const [brand, setBrand] = useState('');
   const [product, setProduct] = useState('');
   const [price, setPrice] = useState('');
@@ -39,6 +39,10 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
     if (ids.length > 0) {
       await fetchData(ids);
       setPage(1);
+
+      // Проверьте, есть ли еще страницы с найденными товарами
+      const hasNextPage = ids.length > 50;
+      setHasNextPage(hasNextPage);
     } else {
       setNotFounded('Товар не найден');
       await fetchData(ids);
@@ -91,4 +95,4 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
   );
 }
 
-export default Filter;
+export default Filter

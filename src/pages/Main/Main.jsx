@@ -12,6 +12,7 @@ const Main = () => {
   const [notFounded, setNotFounded] = useState('')
   const [page, setPage] = useState(1);
   const [duplicates, setDuplicates] = useState([0]);
+  const [hasNextPage, setHasNextPage] = useState(false);
 
   const removeDuplicates = async (offset, ids) => {
     let dubOffset = offset;
@@ -45,6 +46,8 @@ const Main = () => {
       let newIds = Array.from(new Set(idsResponse.result));
       ids = [...new Set([...ids, ...newIds])];
       ids = await removeDuplicates(offset, ids);
+      const nextItemsResponse = await getIds({ offset: offset + 50, limit: 1 });
+      setHasNextPage(nextItemsResponse.result.length > 0);
     }
     const itemsResponse = await getItems({ ids });
     const itemsMap = new Map();
@@ -79,6 +82,7 @@ const Main = () => {
         setPage={setPage}
         fetchData={fetchData}
         setDuplicates={setDuplicates}
+        setHasNextPage={setHasNextPage}
         />
         </div>
         {loading ? (
@@ -90,8 +94,12 @@ const Main = () => {
         )}
       </div>
       <div className='page-buttons-box'>
-        <button className='page-buttons' onClick={() => setPage(prevPage => prevPage - 1)}>Предыдущая страница</button>
-        <button className='page-buttons' onClick={() => setPage(prevPage => prevPage + 1)}>Следующая страница</button>
+        {page > 1 && (
+          <button className='page-buttons' onClick={() => setPage(prevPage => prevPage - 1)}>Предыдущая страница</button>
+        )}
+        {hasNextPage && (
+          <button className='page-buttons' onClick={() => setPage(prevPage => prevPage + 1)}>Следующая страница</button>
+        )}
       </div>
     </div>
   );
