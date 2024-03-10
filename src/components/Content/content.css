@@ -40,3 +40,34 @@
     height: 20px;
     color: gray;
 }
+
+@media (max-width: 768px) {
+    .content-main {
+        margin: 10px 0px 0px 0px;
+    }
+
+    .content-item-name {
+        height: 20px;
+        margin: 0px 10px 10px 10px;
+        font-size: 12px;
+    }
+    
+    .content-item-brand {
+        margin: 30px 10px 0px 10px;
+        height: 20px;
+        font-size: 15px;
+    }
+
+    .content-item-price {
+        margin: 3px 10px 6px 10px;
+        font-size: 15px;
+        height: 20px;
+    }
+
+    .content-item-id {
+        margin: 16px 10px 4px 10px;
+        height: 20px;
+        color: gray;
+        font-size: 9px;
+    }
+}

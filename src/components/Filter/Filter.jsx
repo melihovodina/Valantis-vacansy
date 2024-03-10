@@ -84,7 +84,7 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
         </div>
       </div>
       {filtered && (
-        <div className='filter-button-box'>
+        <div className='filter-back-button-box'>
         <button className='filter-back-button'onClick={resetItems}>Вернуться к основным товарам</button>
         </div>
       )}

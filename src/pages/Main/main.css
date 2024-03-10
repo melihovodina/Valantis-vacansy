@@ -12,7 +12,7 @@
 }
 
 .undertext {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 600;
     margin: 0;
 }
@@ -79,4 +79,40 @@
 
 .page-buttons:hover {
     background-color: #d4374c;
+}
+
+.hidden {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .hidden {
+        display: none;
+    }
+
+    .filter {
+        width: 100%;
+        height: calc(100vh - 60px);
+        margin: 0px;
+        position: absolute;
+        top: 60px;
+    }
+    
+    .filter-animation-enter {
+        transform: translateY(-100%);
+    }
+    
+    .filter-animation-enter-active {
+        transform: translateY(0);
+        transition: transform 500ms;
+    }
+    
+    .filter-animation-exit {
+        transform: translateY(0);
+    }
+    
+    .filter-animation-exit-active {
+        transform: translateY(-100%);
+        transition: transform 500ms;
+    } 
 }

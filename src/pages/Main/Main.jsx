@@ -14,6 +14,7 @@ const Main = () => {
   const [duplicates, setDuplicates] = useState([0]);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [filterResults, setFilterResults] = useState(null);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
 
   const removeDuplicates = async (offset, ids) => {
     let dubOffset = offset;
@@ -67,10 +68,14 @@ const Main = () => {
     fetchData(filterResults);
   }, [page]);
 
+  const toggleFilter = () => {
+    setIsFilterVisible(prevState => !prevState);
+  };
+
   return (
     <div className='main'>
       <div className='header'>
-      <Header/>
+      <Header toggleFilter={toggleFilter}/>
       </div>
       <div className='header-undertext'>
         <p className='undertext'>Каталог ювелирных изделий</p>
@@ -81,7 +86,7 @@ const Main = () => {
         </div>
       </div>
       <div className='content'>
-        <div className='filter'>
+        <div className={`filter ${isFilterVisible ? '' : 'hidden'}`}>
         <Filter setItems={setItems} 
         setLoading={setLoading} 
         setNotFounded={setNotFounded}  
@@ -104,7 +109,7 @@ const Main = () => {
         {page > 1 && !loading && (
           <button className='page-buttons' onClick={() => setPage(prevPage => prevPage - 1)}>Предыдущая страница</button>
         )}
-        {hasNextPage && !loading && (
+        {hasNextPage && !loading && !notFounded &&(
           <button className='page-buttons' onClick={() => setPage(prevPage => prevPage + 1)}>Следующая страница</button>
         )}
       </div>
