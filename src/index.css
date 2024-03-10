@@ -1,14 +1,19 @@
 body, html {
   margin: 0;
   width: 100%;
+  min-height: 101vh;
 }
 
 #root {
   width: 100%;
+  margin: 0;
+  min-height: 101vh;
 }
 
 .App {
   width: 100%;
+  min-height: 101vh;
+  margin: 0;
 }
 
 p, h1, h2, h3 {

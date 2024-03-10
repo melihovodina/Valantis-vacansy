@@ -69,7 +69,12 @@ const Main = () => {
 
   return (
     <div className='main'>
+      <div className='header'>
       <Header/>
+      </div>
+      <div className='header-undertext'>
+        <p className='undertext'>Каталог ювелирных изделий</p>
+      </div>
       <div className='notFounded-box'>
         <div className='notFounded'>
           {notFounded}
@@ -96,10 +101,10 @@ const Main = () => {
         )}
       </div>
       <div className='page-buttons-box'>
-        {page > 1 && (
+        {page > 1 && !loading && (
           <button className='page-buttons' onClick={() => setPage(prevPage => prevPage - 1)}>Предыдущая страница</button>
         )}
-        {hasNextPage && (
+        {hasNextPage && !loading && (
           <button className='page-buttons' onClick={() => setPage(prevPage => prevPage + 1)}>Следующая страница</button>
         )}
       </div>
