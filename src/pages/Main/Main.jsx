@@ -44,6 +44,7 @@ const Main = () => {
     if (allFilteredIds && allFilteredIds.length > 0) {
       let newIds = Array.from(new Set(allFilteredIds.slice(offset, offset + 50)));
       ids = [...new Set([...ids, ...newIds])];
+      setHasNextPage(allFilteredIds.length - (50 * page) > 0)
     } else {
       let idsResponse = await getIds({ offset: offset, limit: 50 });
       let newIds = Array.from(new Set(idsResponse.result));

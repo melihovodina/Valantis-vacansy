@@ -20,6 +20,10 @@ const Filter = ({
   const [filtered, setFiltered] = useState(false);
 
   const handleSearch = async () => {
+    if (!brand && !product && !price) {
+      alert('Пожалуйста, заполните хотя бы одно поле');
+      return;
+    }
     setNotFounded('');
     setIsFilterVisible(false)
     setLoading(true);
@@ -30,7 +34,6 @@ const Filter = ({
       price: price ? Number(price) : null,
       id
     };
-  
     let idsArrays = [];
     for (const [key, value] of Object.entries(filters)) {
       if (value) {
@@ -89,8 +92,6 @@ const Filter = ({
         <p className='filter-text'>Цена</p>
         <input className='filter-input' type='number' style={{appearance: 'textfield'}} 
         placeholder='Найти по цене' value={price} onChange={e => setPrice(e.target.value)}/>
-        <p className='filter-text'>ID</p>
-        <input className='filter-input' placeholder='Найти по ID' value={id} onChange={e => setId(e.target.value)} />
         <div className='filter-button-box'>
           <button className='filter-button' onClick={handleSearch}>Найти</button>
         </div>
