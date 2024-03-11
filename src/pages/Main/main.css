@@ -115,4 +115,12 @@
         transform: translateY(-100%);
         transition: transform 500ms;
     } 
+
+    .page-buttons{
+        font-size: 14px;
+    }
+
+    .spinner {
+        left: 45%
+    }
 }

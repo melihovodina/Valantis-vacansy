@@ -2,7 +2,17 @@ import React, { useState } from 'react';
 import { filter, getItems } from '../../api/api';
 import './filter.css'
 
-const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDuplicates, setHasNextPage, setFilterResults }) => {
+const Filter = ({ 
+  setItems, 
+  setLoading, 
+  setNotFounded, 
+  setPage, 
+  fetchData, 
+  setDuplicates, 
+  setHasNextPage, 
+  setFilterResults, 
+  setIsFilterVisible 
+}) => {
   const [brand, setBrand] = useState('');
   const [product, setProduct] = useState('');
   const [price, setPrice] = useState('');
@@ -11,6 +21,7 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
 
   const handleSearch = async () => {
     setNotFounded('');
+    setIsFilterVisible(false)
     setLoading(true);
     setDuplicates([0])
     const filters = {
@@ -53,6 +64,7 @@ const Filter = ({ setItems, setLoading, setNotFounded, setPage, fetchData, setDu
 
   const resetItems = async () => {
     setNotFounded('');
+    setIsFilterVisible(false)
     setLoading(true);
     setDuplicates([0])
     setPage(1);

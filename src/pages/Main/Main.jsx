@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { getIds, getItems } from '../../api/api'
 import Filter from '../../components/Filter/Filter';
 import Header from '../../components/Header/Header';
@@ -15,6 +15,7 @@ const Main = () => {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [filterResults, setFilterResults] = useState(null);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const removeDuplicates = async (offset, ids) => {
     let dubOffset = offset;
@@ -72,6 +73,21 @@ const Main = () => {
     setIsFilterVisible(prevState => !prevState);
   };
 
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    if (position > scrollPosition && isFilterVisible) {
+      setIsFilterVisible(false);
+    }
+    setScrollPosition(position);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrollPosition, isFilterVisible]);
+
   return (
     <div className='main'>
       <div className='header'>
@@ -95,6 +111,7 @@ const Main = () => {
         setDuplicates={setDuplicates}
         setHasNextPage={setHasNextPage}
         setFilterResults={setFilterResults}
+        setIsFilterVisible={setIsFilterVisible}
         />
         </div>
         {loading ? (
